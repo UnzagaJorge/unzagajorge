@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Académico | Filosofía</title>
+  
+  <!-- Nuevas Fuentes: Space Grotesk (títulos modernos y con carácter) + Source Serif 4 (cuerpo editorial) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..600;1,8..60,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       VARIABLES DE DISEÑO (Paleta Azul, Blanco y Negro)
+       ========================================================================== */
+    :root {
+      --bg-white: #FFFFFF;
+      --bg-offwhite: #F4F7FA;
+      --bg-dark: #0A0E17;         /* Negro azulado profundo */
+      --bg-dark-card: #111827;    /* Gris/Negro para tarjetas oscuras */
+      
+      --blue-primary: #1D4ED8;    /* Azul cobalto intenso */
+      --blue-hover: #1E40AF;      /* Azul marino al pasar el ratón */
+      --blue-soft: #DBEAFE;       /* Azul muy claro para etiquetas/fondos */
+      --blue-accent: #3B82F6;     /* Azul brillante para contrastes en oscuro */
+      
+      --text-black: #0A0E17;
+      --text-gray: #374151;
+      --text-white: #FFFFFF;
+      --text-muted-light: #9CA3AF;
+      
+      --border-dark: #0A0E17;
+      --border-light: #CBD5E1;
+
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'Source Serif 4', Georgia, serif;
+      
+      --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ==========================================================================
+       RESET Y ESTRUCTURA BASE
+       ========================================================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-white);
+      color: var(--text-black);
+      font-family: var(--font-body);
+      line-height: 1.7;
+      font-size: 17px;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, nav, button, .tag, .meta {
+      font-family: var(--font-display);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       ANIMACIONES DE ENTRADA (Intersection Observer)
+       ========================================================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       NAVEGACIÓN SUPERIOR
+       ========================================================================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--bg-white);
+      border-bottom: 2px solid var(--border-dark);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 72px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-dot {
+      width: 12px;
+      height: 12px;
+      background-color: var(--blue-primary);
+      display: inline-block;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      position: relative;
+      padding: 4px 0;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: var(--blue-primary);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* ==========================================================================
+       HERO / CABECERA (Con fondo oscuro y acentos azules)
+       ========================================================================== */
+    .hero {
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      padding: 100px 0 90px;
+      border-bottom: 4px solid var(--blue-primary);
+      position: relative;
+      /* Patrón de cuadrícula sutil de fondo para romper el minimalismo */
+      background-image: 
+        linear-gradient(rgba(59, 130, 246, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.08) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background-color: var(--blue-primary);
+      color: var(--text-white);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 6px 14px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      max-width: 850px;
+    }
+
+    .hero h1 span {
+      color: var(--blue-accent);
+    }
+
+    .hero-quote {
+      font-size: 1.25rem;
+      font-style: italic;
+      color: #D1D5DB;
+      max-width: 680px;
+      border-left: 3px solid var(--blue-accent);
+      padding-left: 20px;
+      margin-bottom: 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background-color: var(--blue-primary);
+      color: var(--text-white);
+      font-weight: 600;
+      padding: 14px 28px;
+      border: 2px solid var(--blue-primary);
+      transition: var(--transition);
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--text-white);
+      color: var(--text-black);
+      border-color: var(--text-white);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--text-white);
+      font-weight: 600;
+      padding: 14px 28px;
+      border: 2px solid var(--text-white);
+      transition: var(--transition);
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      background-color: var(--blue-accent);
+      border-color: var(--blue-accent);
+      color: var(--text-white);
+    }
+
+    /* ==========================================================================
+       SECCIÓN 1: SOBRE MÍ (Sin foto, diseño modular en bloques)
+       ========================================================================== */
+    section {
+      padding: 90px 0;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--border-dark);
+      padding-bottom: 16px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-number {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--blue-primary);
+      font-size: 1.1rem;
+      margin-right: 12px;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .about-bio p {
+      margin-bottom: 20px;
+      color: var(--text-gray);
+      font-size: 1.1rem;
+    }
+
+    .about-bio strong {
+      color: var(--text-black);
+      font-weight: 600;
+    }
+
+    .interests-box {
+      margin-top: 32px;
+    }
+
+    .interests-box h3 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
+      color: var(--text-black);
+    }
+
+    .tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag {
+      background-color: var(--blue-soft);
+      color: var(--blue-primary);
+      border: 1px solid var(--blue-primary);
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* Columna derecha: Cuaderno de lecturas / Enfoques actuales */
+    .reading-card {
+      background-color: var(--bg-offwhite);
+      border: 2px solid var(--border-dark);
+      box-shadow: 6px 6px 0px var(--blue-primary);
+      padding: 32px;
+    }
+
+    .reading-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reading-list {
+      list-style: none;
+    }
+
+    .reading-list li {
+      margin-bottom: 18px;
+      padding-left: 16px;
+      border-left: 3px solid var(--blue-primary);
+    }
+
+    .reading-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .reading-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      display: block;
+      font-size: 1rem;
+      color: var(--text-black);
+    }
+
+    .reading-author {
+      font-size: 0.95rem;
+      color: var(--text-gray);
+      font-style: italic;
+    }
+
+    /* ==========================================================================
+       SECCIÓN 2: TRABAJOS Y ESCRITOS (Tarjetas estructuradas)
+       ========================================================================== */
+    .works-section {
+      background-color: var(--bg-offwhite);
+      border-top: 2px solid var(--border-dark);
+      border-bottom: 2px solid var(--border-dark);
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background-color: var(--bg-white);
+      color: var(--text-black);
+      border: 2px solid var(--border-dark);
+      padding: 8px 18px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-btn:hover {
+      background-color: var(--blue-soft);
+      border-color: var(--blue-primary);
+      color: var(--blue-primary);
+    }
+
+    .filter-btn.active {
+      background-color: var(--blue-primary);
+      color: var(--text-white);
+      border-color: var(--blue-primary);
+    }
+
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 28px;
+    }
+
+    .work-card {
+      background-color: var(--bg-white);
+      border: 2px solid var(--border-dark);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+    }
+
+    .work-card:hover {
+      transform: translate(-4px, -4px);
+      box-shadow: 6px 6px 0px var(--bg-dark);
+      border-color: var(--blue-primary);
+    }
+
+    .work-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .work-category {
+      color: var(--blue-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .work-year {
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      padding: 2px 8px;
+    }
+
+    .work-card h3 {
+      font-size: 1.35rem;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      color: var(--text-black);
+    }
+
+    .work-context {
+      font-size: 0.9rem;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    .work-abstract {
+      font-size: 0.98rem;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+      display: none;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border-light);
+    }
+
+    .work-abstract.open {
+      display: block;
+    }
+
+    .work-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-light);
+      margin-top: auto;
+    }
+
+    .toggle-abstract {
+      background: none;
+      border: none;
+      color: var(--blue-primary);
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .toggle-abstract:hover {
+      text-decoration: underline;
+    }
+
+    .read-link {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-black);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .read-link:hover {
+      color: var(--blue-primary);
+    }
+
+    /* ==========================================================================
+       SECCIÓN 3: CONTACTO (Bloque negro y azul de alto contraste)
+       ========================================================================== */
+    .contact-section {
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+    }
+
+    .contact-section .section-header {
+      border-bottom-color: #374151;
+    }
+
+    .contact-section .section-number {
+      color: var(--blue-accent);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 56px;
+    }
+
+    .contact-info p {
+      color: #D1D5DB;
+      font-size: 1.1rem;
+      margin-bottom: 28px;
+    }
+
+    .email-box {
+      background-color: var(--bg-dark-card);
+      border: 1px solid #374151;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .email-text {
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--blue-accent);
+      font-size: 1.05rem;
+    }
+
+    .copy-btn {
+      background-color: var(--blue-primary);
+      color: var(--text-white);
+      border: none;
+      padding: 8px 14px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .copy-btn:hover {
+      background-color: var(--blue-accent);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .social-links a {
+      border: 1px solid #4B5563;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      border-color: var(--blue-accent);
+      background-color: var(--blue-primary);
+    }
+
+    /* Formulario con bordes sólidos */
+    .contact-form {
+      background-color: var(--bg-dark-card);
+      border: 2px solid #374151;
+      padding: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #E5E7EB;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background-color: var(--bg-dark);
+      border: 1px solid #4B5563;
+      color: var(--text-white);
+      padding: 12px 14px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--blue-accent);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background-color: var(--blue-primary);
+      color: var(--text-white);
+      border: none;
+      padding: 14px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .submit-btn:hover {
+      background-color: var(--blue-accent);
+    }
+
+    #formFeedback {
+      margin-top: 14px;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: #60A5FA;
+      display: none;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    footer {
+      background-color: #05070C;
+      color: var(--text-muted-light);
+      text-align: center;
+      padding: 28px 24px;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      border-top: 1px solid #1F2937;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE (Móviles y Tablets)
+       ========================================================================== */
+    @media (max-width: 820px) {
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        gap: 18px;
+      }
+
+      .hero {
+        padding: 70px 0 60px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .nav-links a {
+        font-size: 0.8rem;
+      }
+      
+      .reading-card {
+        box-shadow: 4px 4px 0px var(--blue-primary);
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVEGACIÓN -->
+  <header>
+    <div class="container nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-dot"></span>
+        <span>A. VALLEJO // FILOSOFÍA</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#sobre-mi">Sobre mí</a></li>
+          <li><a href="#trabajos">Trabajos</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO / PORTADA -->
+  <section class="hero">
+    <div class="container">
+      <div class="reveal">
+        <span class="hero-badge">Graduado en Filosofía · Ensayo y Crítica</span>
+        <h1>Pensar la técnica, el lenguaje y la <span>acción humana</span>.</h1>
+        <p class="hero-quote">
+          «La filosofía no es una doctrina, sino una actividad: el esclarecimiento lógico de los pensamientos.»
+        </p>
+        <div class="hero-actions">
+          <a href="#trabajos" class="btn-primary">Explorar escritos</a>
+          <a href="#contacto" class="btn-outline">Iniciar diálogo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 1: SOBRE MÍ (Sin fotografía) -->
+  <section id="sobre-mi">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2><span class="section-number">01.</span>Sobre mí</h2>
+        <span class="meta">Perfil e inquietudes intelectuales</span>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-bio reveal">
+          <p>
+            Soy graduado en <strong>Filosofía</strong>, interesado en cómo las estructuras conceptuales y tecnológicas configuran nuestra experiencia cotidiana y nuestras decisiones morales.
+          </p>
+          <p>
+            Mi trabajo actual se centra en el cruce entre la <strong>epistemología contemporánea</strong>, la <strong>filosofía de la técnica</strong> y la <strong>ética aplicada</strong>. Más allá de los sistemas cerrados, entiendo la escritura filosófica como una herramienta para formular mejores preguntas frente a problemas complejos.
+          </p>
+
+          <div class="interests-box">
+            <h3>Líneas de interés</h3>
+            <div class="tags-list">
+              <span class="tag">Filosofía de la Técnica</span>
+              <span class="tag">Epistemología Social</span>
+              <span class="tag">Ética Contemporánea</span>
+              <span class="tag">Filosofía del Lenguaje</span>
+              <span class="tag">Teoría Crítica</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloque lateral sin foto: Cuaderno de lecturas -->
+        <aside class="reading-card reveal">
+          <h3>En mi mesa de trabajo</h3>
+          <ul class="reading-list">
+            <li>
+              <span class="reading-title">La condición humana</span>
+              <span class="reading-author">Hannah Arendt — Relectura sobre acción y labor</span>
+            </li>
+            <li>
+              <span class="reading-title">El modo de existencia de los objetos técnicos</span>
+              <span class="reading-author">Gilbert Simondon — Notas de seminario</span>
+            </li>
+            <li>
+              <span class="reading-title">Investigaciones filosóficas</span>
+              <span class="reading-author">Ludwig Wittgenstein — Juegos de lenguaje</span>
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 2: TRABAJOS Y ESCRITOS -->
+  <section id="trabajos" class="works-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2><span class="section-number">02.</span>Trabajos y Escritos</h2>
+        <span class="meta">Selección académica y ensayos</span>
+      </div>
+
+      <!-- Botones de filtrado -->
+      <div class="filter-bar reveal">
+        <button class="filter-btn active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="tfg">Trabajo Fin de Grado</button>
+        <button class="filter-btn" data-filter="ensayo">Ensayos</button>
+        <button class="filter-btn" data-filter="seminario">Notas de Seminario</button>
+      </div>
+
+      <!-- Rejilla de trabajos -->
+      <div class="works-grid">
+        <!-- Trabajo 1 -->
+        <article class="work-card reveal" data-category="tfg">
+          <div>
+            <div class="work-meta">
+              <span class="work-category">Trabajo Fin de Grado</span>
+              <span class="work-year">2025</span>
+            </div>
+            <h3>Autonomía moral y opacidad algorítmica: una aproximación desde la ética de la responsabilidad</h3>
+            <p class="work-context">Memoria de Grado en Filosofía · Calificación: Sobresaliente</p>
+            <div class="work-abstract" id="abs-1">
+              Este trabajo analiza hasta qué punto la delegación de decisiones en sistemas automatizados diluye la agencia moral del sujeto, proponiendo un marco basado en la responsabilidad prospectiva.
+            </div>
+          </div>
+          <div class="work-footer">
+            <button class="toggle-abstract" onclick="toggleAbstract('abs-1', this)">+ Ver resumen</button>
+            <a href="#" class="read-link" onclick="alert('Aquí puedes enlazar tu archivo PDF (ej. tfg.pdf)'); return false;">Leer PDF →</a>
+          </div>
+        </article>
+
+        <!-- Trabajo 2 -->
+        <article class="work-card reveal" data-category="ensayo">
+          <div>
+            <div class="work-meta">
+              <span class="work-category">Ensayo</span>
+              <span class="work-year">2025</span>
+            </div>
+            <h3>El silencio como límite del discurso en el primer Wittgenstein</h3>
+            <p class="work-context">Ensayo crítico sobre el Tractatus Logico-Philosophicus</p>
+            <div class="work-abstract" id="abs-2">
+              Un recorrido por las proposiciones finales del Tractatus para examinar la distinción entre lo que puede decirse con sentido y aquello que únicamente puede mostrarse.
+            </div>
+          </div>
+          <div class="work-footer">
+            <button class="toggle-abstract" onclick="toggleAbstract('abs-2', this)">+ Ver resumen</button>
+            <a href="#" class="read-link" onclick="alert('Aquí puedes enlazar el texto completo'); return false;">Leer texto →</a>
+          </div>
+        </article>
+
+        <!-- Trabajo 3 -->
+        <article class="work-card reveal" data-category="seminario">
+          <div>
+            <div class="work-meta">
+              <span class="work-category">Notas de Seminario</span>
+              <span class="work-year">2024</span>
+            </div>
+            <h3>Técnica, alienación y individuación en Gilbert Simondon</h3>
+            <p class="work-context">Seminario de Filosofía Contemporánea</p>
+            <div class="work-abstract" id="abs-3">
+              Apuntes críticos sobre la oposición artificial entre cultura y técnica, y cómo la comprensión del funcionamiento interno de los objetos técnicos supera la alienación contemporánea.
+            </div>
+          </div>
+          <div class="work-footer">
+            <button class="toggle-abstract" onclick="toggleAbstract('abs-3', this)">+ Ver resumen</button>
+            <a href="#" class="read-link" onclick="alert('Aquí puedes enlazar tus apuntes o PDF'); return false;">Leer notas →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 3: CONTACTO -->
+  <section id="contacto" class="contact-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2><span class="section-number">03.</span>Contacto</h2>
+        <span class="meta">Diálogo y colaboración</span>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <p>
+            Si deseas comentar alguno de los textos, compartir recomendaciones bibliográficas o proponer una colaboración en grupos de estudio o seminarios, estaré encantado de conversar.
+          </p>
+
+          <div class="email-box">
+            <span class="email-text" id="emailAddress">contacto@ejemplo-filosofia.es</span>
+            <button class="copy-btn" onclick="copyEmail()">Copiar correo</button>
+          </div>
+
+          <div class="social-links">
+            <a href="#" target="_blank">PhilPapers</a>
+            <a href="#" target="_blank">Substack / Blog</a>
+            <a href="#" target="_blank">Goodreads</a>
+          </div>
+        </div>
+
+        <form class="contact-form reveal" onsubmit="handleFormSubmit(event)">
+          <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" id="name" required placeholder="Tu nombre">
+          </div>
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" required placeholder="tu@correo.com">
+          </div>
+          <div class="form-group">
+            <label for="message">Mensaje</label>
+            <textarea id="message" rows="4" required placeholder="Escribe aquí tu comentario o propuesta..."></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Enviar mensaje</button>
+          <p id="formFeedback">✓ Mensaje preparado. (Recuerda conectar Formspree para recibirlo en tu bandeja).</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 · Portfolio Académico de Filosofía · Diseñado con rigor y claridad.</p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // 1. Animaciones al hacer scroll (Intersection Observer)
+    const observerOptions = {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // 2. Filtrado de trabajos por categoría
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const workCards = document.querySelectorAll('.work-card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.getAttribute('data-filter');
+
+        workCards.forEach(card => {
+          if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // 3. Desplegar/Ocultar resumen de cada trabajo
+    function toggleAbstract(id, btn) {
+      const abstract = document.getElementById(id);
+      abstract.classList.toggle('open');
+      btn.textContent = abstract.classList.contains('open') ? '− Ocultar resumen' : '+ Ver resumen';
+    }
+
+    // 4. Copiar correo al portapapeles
+    function copyEmail() {
+      const email = document.getElementById('emailAddress').textContent;
+      navigator.clipboard.writeText(email).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        const originalText = btn.textContent;
+        btn.textContent = '¡Copiado!';
+        btn.style.backgroundColor = '#10B981';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.backgroundColor = '';
+        }, 2000);
+      });
+    }
+
+    // 5. Simulación de envío de formulario
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      document.getElementById('formFeedback').style.display = 'block';
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>
